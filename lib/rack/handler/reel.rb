@@ -1,4 +1,4 @@
-require 'celluloid/current'
+require 'celluloid/autostart'
 require 'reel/rack/server'
 
 module Rack
@@ -26,7 +26,10 @@ module Rack
         end
       end
     end
-
-    register :reel, Reel
   end
+end
+
+# For Rack 3 compatibility, register the handler if the method exists
+if Rack::Handler.respond_to?(:register)
+  Rack::Handler.register(:reel, Rack::Handler::Reel)
 end

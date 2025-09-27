@@ -6,7 +6,7 @@ require 'rack/head'
 describe Reel::Rack::Server do
   let(:host) { "127.0.0.1" }
   let(:port) { 30000 }
-  let(:headers) { {"Content-Type" => "text/plain", "Content-Length" => body.length.to_s} }
+  let(:headers) { {"content-type" => "text/plain", "content-length" => body.length.to_s} }
   let(:body) { "hello world" }
   let(:uri) { URI("http://#{host}:#{port}/") }
   let(:http) { Net::HTTP.new(uri.host, uri.port) }
@@ -46,7 +46,7 @@ describe Reel::Rack::Server do
   end
 
   context "with no Content-Length header and the body is Enumerable" do
-    let(:headers) { {"Content-Type" => "text/plain"} }
+    let(:headers) { {"content-type" => "text/plain"} }
 
     it "sends a chunked transfer response if there is no Content-Length header and the body is Enumerable" do
       expect(http.send_request('GET', uri.path, 'test')['content-length']).to eq nil
@@ -56,10 +56,10 @@ describe Reel::Rack::Server do
 
   context "works with Rack::Builder" do
     let(:rack_app) {
-      headers = {"Content-Type" => "text/plain"}
+      headers = {"content-type" => "text/plain"}
       Rack::Builder.app {
-        map("/path1") { run proc { [200, headers.merge("Content-Length"=>"5"), ["path1"]] } }
-        run proc { [200, headers.merge("Content-Length"=>"3"), ["any"]] }
+        map("/path1") { run proc { [200, headers.merge("content-length"=>"5"), ["path1"]] } }
+        run proc { [200, headers.merge("content-length"=>"3"), ["any"]] }
       }
     }
 
