@@ -8,7 +8,7 @@ require 'uri'
 module Reel
   module Rack
     class Server < Reel::Server::HTTP
-      include Celluloid::Internals::Logger
+      include Celluloid::Logger if defined?(Celluloid::Logger)
 
       attr_reader :app
 
@@ -16,8 +16,8 @@ module Reel
         raise ArgumentError, "no host given" unless options[:Host]
         raise ArgumentError, "no port given" unless options[:Port]
 
-        info  "A Reel good HTTP server! (Codename \"#{::Reel::CODENAME}\")"
-        info "Listening on http://#{options[:Host]}:#{options[:Port]}"
+        log_info "A Reel good HTTP server! (Codename \"#{::Reel::CODENAME}\")"
+        log_info "Listening on http://#{options[:Host]}:#{options[:Port]}"
 
         super(options[:Host], options[:Port], &method(:on_connection))
         @app = app
@@ -61,7 +61,7 @@ module Reel
             request.finish_response
           end
         else
-          Logger.error("don't know how to render: #{body.inspect}")
+          log_error("don't know how to render: #{body.inspect}")
           request.respond :internal_server_error, "An error occurred processing your request"
         end
 
@@ -121,6 +121,28 @@ module Reel
 
       # Those headers must not start with 'HTTP_'.
       NO_PREFIX_HEADERS=%w[CONTENT_TYPE CONTENT_LENGTH].freeze
+
+      private
+
+      def log_info(message)
+        if respond_to?(:info)
+          info(message)
+        elsif defined?(Celluloid) && Celluloid.respond_to?(:logger)
+          Celluloid.logger.info(message)
+        else
+          puts "[INFO] #{message}"
+        end
+      end
+
+      def log_error(message)
+        if respond_to?(:error)
+          error(message)
+        elsif defined?(Celluloid) && Celluloid.respond_to?(:logger)
+          Celluloid.logger.error(message)
+        else
+          $stderr.puts "[ERROR] #{message}"
+        end
+      end
 
       def status_symbol(status)
         if status.is_a?(Integer)
