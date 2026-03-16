@@ -8,7 +8,7 @@ gem 'reel',         github: 'logicsys/reel'
 gem 'http',         github: 'tarcieri/http'
 gem 'http_parser.rb', '~> 0.8.0'
 
-gem 'coveralls', require: false
+gem 'simplecov', require: false
 
 # Specify your gem's dependencies in reel-app.gemspec
 gemspec
