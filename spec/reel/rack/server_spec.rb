@@ -3,7 +3,7 @@ require 'net/http'
 require 'rack/lint'
 require 'rack/head'
 
-describe Reel::Rack::Server do
+RSpec.describe Reel::Rack::Server do
   let(:host) { "127.0.0.1" }
   let(:port) { 30000 }
   let(:headers) { {"content-type" => "text/plain", "content-length" => body.length.to_s} }
