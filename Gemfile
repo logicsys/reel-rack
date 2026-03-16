@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
-gem 'celluloid',    github: 'celluloid/celluloid',    branch: 'master'
-gem 'celluloid-io', github: 'celluloid/celluloid-io', branch: 'master'
+gem 'celluloid',    github: 'logicsys/celluloid',    branch: 'master'
+gem 'celluloid-io', github: 'logicsys/celluloid-io', branch: 'master'
 
 # gem 'reel',         github: 'celluloid/reel'
 gem 'reel',         github: 'logicsys/reel'
